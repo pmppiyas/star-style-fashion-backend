@@ -3,7 +3,6 @@ import { User } from '@app/module/user/user.model';
 import { hashingPassword } from '@app/utils/hashingPassword';
 
 export const signup = async (payload: IUser) => {
-  console.log(payload);
   const { password, ...rest } = payload;
   let hashPassword = '';
 
@@ -11,7 +10,6 @@ export const signup = async (payload: IUser) => {
     hashPassword = await hashingPassword(password);
   }
 
-  console.log(hashPassword);
   const user = await User.create({
     password: hashPassword,
     ...rest,

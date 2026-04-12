@@ -4,6 +4,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { StatusCodes } from 'http-status-codes';
 import router from '@app/routes';
+import { globalErrHandler } from '@app/middleware/globalErrHandler';
 const app = express();
 
 app.use(express.json());
@@ -35,5 +36,7 @@ app.get('/', async (req: Request, res: Response) => {
     message: 'Hello, Wellcome to Star Style',
   });
 });
+
+app.use(globalErrHandler);
 
 export default app;

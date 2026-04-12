@@ -13,6 +13,7 @@
   "packageManager": "pnpm@10.17.1",
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "borkha-house-backend": "link:",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.4.1",
@@ -20,7 +21,8 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.1",
     "mongoose": "^9.4.1",
-    "tsconfig-paths": "^4.2.0"
+    "tsconfig-paths": "^4.2.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
