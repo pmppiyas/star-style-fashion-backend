@@ -23,4 +23,5 @@ export interface IUser {
   location: ILocation[];
   role: Role;
   status: IStatus;
+  password: string;
 }

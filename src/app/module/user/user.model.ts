@@ -13,7 +13,6 @@ const UserSchema = new Schema<IUser>(
     number: {
       type: String,
     },
-
     location: {
       type: [String],
     },
@@ -28,6 +27,10 @@ const UserSchema = new Schema<IUser>(
     },
     profileImage: {
       type: String,
+    },
+    password: {
+      type: String,
+      require: true,
     },
   },
   {

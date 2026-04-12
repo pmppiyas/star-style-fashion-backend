@@ -6,6 +6,9 @@ interface EnvConfig {
   NODE_ENV: 'development' | 'production';
   FRONTEND_URL1: string;
   DB_URL: string;
+  BCRYPT: {
+    SALT_ROUND: string;
+  };
 }
 
 const loadEnvVars = (): EnvConfig => {
@@ -14,6 +17,7 @@ const loadEnvVars = (): EnvConfig => {
     'NODE_ENV',
     'FRONTEND_URL1',
     'DB_URL',
+    'SALT_ROUND',
   ];
 
   requiredEnvVars.forEach((key) => {
@@ -27,6 +31,9 @@ const loadEnvVars = (): EnvConfig => {
     NODE_ENV: process.env.NODE_ENV as 'development' | 'production',
     FRONTEND_URL1: process.env.FRONTEND_URL1 as string,
     DB_URL: process.env.DB_URL as string,
+    BCRYPT: {
+      SALT_ROUND: process.env.SALT_ROUND as string,
+    },
   };
 };
 

@@ -3,6 +3,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { StatusCodes } from 'http-status-codes';
+import router from '@app/routes';
 const app = express();
 
 app.use(express.json());
@@ -25,6 +26,8 @@ app.use(
 
 app.use(cookieParser());
 app.set('trust proxy', 1);
+
+app.use('/api/v1', router);
 
 app.get('/', async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).send({
