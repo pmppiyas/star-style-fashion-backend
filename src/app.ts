@@ -1,0 +1,36 @@
+import env from '@app/config/env.config';
+import express, { Request, Response } from 'express';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import { StatusCodes } from 'http-status-codes';
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+const allowedOrigin = [env.FRONTEND_URL1];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not alloed by CORS'));
+      }
+    },
+    credentials: true,
+  })
+);
+
+app.use(cookieParser());
+app.set('trust proxy', 1);
+
+app.get('/', async (req: Request, res: Response) => {
+  res.status(StatusCodes.OK).send({
+    success: true,
+    message: 'Hello, Wellcome to Star Style',
+  });
+});
+
+export default app;
