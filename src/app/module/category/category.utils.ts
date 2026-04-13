@@ -26,4 +26,6 @@ export const createCategoryWithSubSchema = z.object({
       })
     )
     .optional(),
+
+  parentId: z.string().optional(),
 });

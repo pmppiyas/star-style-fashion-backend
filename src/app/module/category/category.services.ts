@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 const addCategory = async (payload: {
   name: string;
   children?: { name: string }[];
+  parentId?: string;
 }) => {
   const session = await mongoose.startSession();
 
@@ -15,30 +16,41 @@ const addCategory = async (payload: {
 
     const isCategoryExist = await Category.findOne({
       name: payload.name,
-      parentId: null,
+      parentId: payload.parentId,
     }).session(session);
 
     if (isCategoryExist) {
-      throw new AppError(StatusCodes.CONFLICT, 'Category already exists!');
+      throw new AppError(
+        StatusCodes.CONFLICT,
+        'Category already exists in this level!'
+      );
     }
 
-    const [parentCategory] = await Category.create([{ name: payload.name }], {
-      session,
-    });
+    const createdCategories = await Category.create(
+      [
+        {
+          name: payload.name,
+          parentId: payload.parentId,
+        },
+      ],
+      { session }
+    );
 
-    if (!parentCategory) {
+    const newCategory = createdCategories[0];
+
+    if (!newCategory) {
       throw new AppError(
         StatusCodes.INTERNAL_SERVER_ERROR,
-        'Failed to create parent category'
+        'Failed to create category'
       );
     }
 
     let createdChildren: ICategory[] = [];
 
-    if (payload.children && payload.children.length > 0) {
+    if (!payload.parentId && payload.children && payload.children.length > 0) {
       const childrenToCreate = payload.children.map((child) => ({
         name: child.name,
-        parentId: parentCategory._id,
+        parentId: newCategory._id,
       }));
 
       createdChildren = await Category.create(childrenToCreate, { session });
@@ -48,7 +60,7 @@ const addCategory = async (payload: {
     await session.endSession();
 
     return {
-      parent: parentCategory,
+      category: newCategory,
       children: createdChildren,
     };
   } catch (error: any) {
@@ -56,14 +68,45 @@ const addCategory = async (payload: {
     await session.endSession();
 
     if (error instanceof AppError) throw error;
+    throw new AppError(StatusCodes.INTERNAL_SERVER_ERROR, error.message);
+  }
+};
 
-    throw new AppError(
-      StatusCodes.INTERNAL_SERVER_ERROR,
-      error.message || 'Failed to create category'
+const buildCategoryTree = (
+  categories: ICategory[],
+  parentId: string | null = null
+): ICategory[] => {
+  const categoryList: any[] = [];
+  let filteredCategories: ICategory[] = [];
+
+  if (parentId === null) {
+    filteredCategories = categories.filter((cat) => !cat.parentId);
+  } else {
+    filteredCategories = categories.filter(
+      (cat) => String(cat.parentId) === String(parentId)
     );
   }
+
+  for (const cat of filteredCategories) {
+    categoryList.push({
+      _id: cat._id,
+      name: cat.name,
+      children: buildCategoryTree(categories, String(cat._id)),
+    });
+  }
+
+  return categoryList;
+};
+
+const getAllCategories = async () => {
+  const categories = await Category.find().lean();
+
+  const categoryTree = buildCategoryTree(categories);
+
+  return categoryTree;
 };
 
 export const CategoryService = {
   addCategory,
+  getAllCategories,
 };
