@@ -1,4 +1,4 @@
-import { ICategory } from '@app/module/category/category.utils';
+import { ICategory } from '@app/module/category/category.interface';
 import { model, Schema, Types } from 'mongoose';
 
 const categorySchema = new Schema<ICategory>(

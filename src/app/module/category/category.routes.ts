@@ -1,6 +1,9 @@
 import { validateRequest } from '@app/middleware/validateRequest';
 import { CategoryController } from '@app/module/category/category.controller';
-import { createCategoryWithSubSchema } from '@app/module/category/category.utils';
+import {
+  createCategoryWithSubSchema,
+  updateCategorySchema,
+} from '@app/module/category/category.validation';
 import { Router } from 'express';
 
 const router = Router();
@@ -12,5 +15,11 @@ router.post(
 );
 
 router.get('/all', CategoryController.getAllCategories);
+
+router.put(
+  '/update',
+  validateRequest(updateCategorySchema),
+  CategoryController.updateCategory
+);
 
 export const CategoryRoutes = router;

@@ -1,6 +1,6 @@
 import { AppError } from '@app/error/appError';
 import { Category } from '@app/module/category/category.model';
-import { ICategory } from '@app/module/category/category.utils';
+import { ICategory } from '@app/module/category/category.interface';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 
@@ -106,7 +106,35 @@ const getAllCategories = async () => {
   return categoryTree;
 };
 
+const updateCategory = async (payload: {
+  name: string;
+  categoryId?: string;
+  parentId?: string;
+  MODE: 'EDIT' | 'MOVE';
+}) => {
+  const { name, categoryId, parentId, MODE } = payload;
+
+  if (MODE === 'EDIT') {
+    const category = await Category.findByIdAndUpdate(
+      categoryId,
+      { name },
+      { new: true }
+    );
+    return category;
+  }
+
+  if (MODE === 'MOVE') {
+    const category = await Category.findByIdAndUpdate(
+      categoryId,
+      { parentId },
+      { new: true }
+    );
+    return category;
+  }
+};
+
 export const CategoryService = {
   addCategory,
   getAllCategories,
+  updateCategory,
 };
