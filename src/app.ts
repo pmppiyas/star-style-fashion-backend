@@ -6,8 +6,26 @@ import { StatusCodes } from 'http-status-codes';
 import router from '@app/routes';
 import { globalErrHandler } from '@app/middleware/globalErrHandler';
 import { notFound } from '@app/middleware/notFound';
+import passport from 'passport';
+import session from 'express-session';
+import './app/config/passport.config';
+
 const app = express();
 
+app.use(
+  session({
+    secret: env.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: env.NODE_ENV === 'production' ? true : false,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    },
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

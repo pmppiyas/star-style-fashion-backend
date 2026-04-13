@@ -18,6 +18,7 @@ export enum IStatus {
 export interface IUser {
   _id?: Types.ObjectId;
   name: string;
+  email?: string;
   number?: string;
   profileImage: string;
   location: ILocation[];

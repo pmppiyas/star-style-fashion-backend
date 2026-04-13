@@ -24,6 +24,7 @@ export const signup = async (payload: IUser) => {
 
   const user = await User.create({
     password: hashPassword,
+    number,
     ...rest,
   });
 

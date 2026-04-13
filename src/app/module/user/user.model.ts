@@ -10,9 +10,11 @@ const UserSchema = new Schema<IUser>(
     name: {
       type: String,
     },
+    email: {
+      type: String,
+    },
     number: {
       type: String,
-      required: true,
     },
     location: {
       type: [String],
@@ -31,7 +33,7 @@ const UserSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      require: true,
+      required: true,
     },
   },
   {
