@@ -133,8 +133,20 @@ const updateCategory = async (payload: {
   }
 };
 
+const deleteCategory = async (categoryId: string) => {
+  const isExist = await Category.findById(categoryId);
+
+  if (!isExist) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Targeted category not found!');
+  }
+
+  await Category.findByIdAndDelete(categoryId);
+  return null;
+};
+
 export const CategoryService = {
   addCategory,
   getAllCategories,
   updateCategory,
+  deleteCategory,
 };

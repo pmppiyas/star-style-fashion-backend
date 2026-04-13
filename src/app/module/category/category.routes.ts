@@ -22,4 +22,6 @@ router.put(
   CategoryController.updateCategory
 );
 
+router.delete('/:id', CategoryController.deleteCategory);
+
 export const CategoryRoutes = router;
