@@ -1,10 +1,22 @@
+import { AppError } from '@app/error/appError';
 import { IUser } from '@app/module/user/user.interface';
 import { User } from '@app/module/user/user.model';
 import { hashingPassword } from '@app/utils/hashingPassword';
+import { StatusCodes } from 'http-status-codes';
 
 export const signup = async (payload: IUser) => {
-  const { password, ...rest } = payload;
+  const { password, number, ...rest } = payload;
   let hashPassword = '';
+
+  const isExist = await User.findOne({
+    number,
+  });
+  if (isExist) {
+    throw new AppError(
+      StatusCodes.CONFLICT,
+      'Account already exist by this number.'
+    );
+  }
 
   if (password) {
     hashPassword = await hashingPassword(password);

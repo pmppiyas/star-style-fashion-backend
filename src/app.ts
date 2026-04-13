@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import { StatusCodes } from 'http-status-codes';
 import router from '@app/routes';
 import { globalErrHandler } from '@app/middleware/globalErrHandler';
+import { notFound } from '@app/middleware/notFound';
 const app = express();
 
 app.use(express.json());
@@ -38,5 +39,7 @@ app.get('/', async (req: Request, res: Response) => {
 });
 
 app.use(globalErrHandler);
+
+app.use(notFound);
 
 export default app;

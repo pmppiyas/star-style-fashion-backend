@@ -12,6 +12,7 @@ const UserSchema = new Schema<IUser>(
     },
     number: {
       type: String,
+      required: true,
     },
     location: {
       type: [String],

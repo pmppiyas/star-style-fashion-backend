@@ -50,11 +50,11 @@ export const handleZodValidationError = (err: any) => {
 
   const prefix =
     errMode[0]?.received === 'undefined' || errMode[0]?.code === 'invalid_type'
-      ? 'Missing required field'
-      : 'Wrong value in';
+      ? 'Missing'
+      : 'Wrong';
 
   return {
-    message: `${prefix}: ${capitalizedFields}`,
+    message: `${capitalizedFields} is ${prefix}`,
     statusCode: StatusCodes.BAD_REQUEST,
   };
 };
