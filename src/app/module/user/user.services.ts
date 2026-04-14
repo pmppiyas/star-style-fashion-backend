@@ -1,5 +1,5 @@
 import { AppError } from '@app/error/appError';
-import { IUser } from '@app/module/user/user.interface';
+import { IUser, Role } from '@app/module/user/user.interface';
 import { User } from '@app/module/user/user.model';
 import { hashingPassword } from '@app/utils/hashingPassword';
 import { StatusCodes } from 'http-status-codes';

@@ -133,7 +133,7 @@ const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
   }
 
   const updatedProduct = await Product.findByIdAndUpdate(productId, payload, {
-    new: true,
+    returnDocument: 'after',
     runValidators: true,
   });
 

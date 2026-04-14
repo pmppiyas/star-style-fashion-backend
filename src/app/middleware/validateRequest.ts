@@ -1,4 +1,3 @@
-import { AppError } from '@app/error/appError';
 import { NextFunction, Request, Response } from 'express';
 import { ZodSchema } from 'zod';
 

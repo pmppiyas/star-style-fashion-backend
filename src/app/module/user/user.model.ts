@@ -22,6 +22,7 @@ const UserSchema = new Schema<IUser>(
     role: {
       type: String,
       enum: Object.values(Role),
+      default: Role.BUYER,
     },
     status: {
       type: String,
