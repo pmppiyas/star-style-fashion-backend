@@ -6,8 +6,12 @@ export const validateRequest =
   (schema: ZodSchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      if (req.body?.body && typeof req.body.body === 'string') {
-        req.body = JSON.parse(req.body.body);
+      const raw = req.body?.body || req.body?.data || req.body;
+
+      if (typeof raw === 'string') {
+        req.body = JSON.parse(raw);
+      } else {
+        req.body = raw;
       }
 
       req.body = await schema.parseAsync(req.body);

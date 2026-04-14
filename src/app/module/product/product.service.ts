@@ -1,6 +1,8 @@
+import { AppError } from '@app/error/appError';
 import { IOptions, IProduct } from '@app/module/product/product.interface';
 import { Product } from '@app/module/product/product.model';
 import { calculatePagination } from '@app/utils/calculatePagination';
+import { StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
 import slugify from 'slugify';
 
@@ -94,7 +96,52 @@ const getAllProducts = async (filters: any, options: IOptions) => {
   };
 };
 
+const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
+  const isExistProduct = await Product.findById(productId);
+
+  if (!isExistProduct) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Targeted product not found');
+  }
+
+  const existingImages = isExistProduct.images || [];
+
+  if (payload.images && payload.images.length > 0) {
+    payload.images = [...existingImages, ...payload.images];
+  }
+
+  if (!isExistProduct.thumbnail) {
+    payload.thumbnail = payload?.images?.[0];
+  }
+
+  if (payload.categoryId) {
+    payload.categoryId = new Types.ObjectId(payload.categoryId) as any;
+  }
+
+  if (payload.subCategoryId) {
+    payload.subCategoryId = new Types.ObjectId(payload.subCategoryId) as any;
+  }
+
+  if (
+    payload.price &&
+    payload.discountPrice &&
+    payload.discountPrice >= payload.price
+  ) {
+    throw new AppError(
+      StatusCodes.BAD_REQUEST,
+      'Discount price must be less than regular price'
+    );
+  }
+
+  const updatedProduct = await Product.findByIdAndUpdate(productId, payload, {
+    new: true,
+    runValidators: true,
+  });
+
+  return updatedProduct;
+};
+
 export const ProductService = {
   addProduct,
   getAllProducts,
+  updateProduct,
 };

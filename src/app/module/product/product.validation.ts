@@ -19,3 +19,5 @@ export const createProductSchema = z.object({
     .default('IN_STOCK'),
   isFeatured: z.boolean().optional(),
 });
+
+export const updateProductSchema = createProductSchema.partial();
