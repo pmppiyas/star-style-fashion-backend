@@ -1,11 +1,16 @@
+import {
+  productFilterableFields,
+  productOptionFields,
+} from '@app/constant/product.constant';
 import { ProductService } from '@app/module/product/product.service';
 import catchAsync from '@app/utils/catchAsync';
+import queryPick from '@app/utils/queryPick';
 import sendResponse from '@app/utils/sendResponse';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 
 const addProduct = catchAsync(
-  async (req: Request, res: Response, nest: NextFunction) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const files = req.files as Express.Multer.File[];
 
     const imageUrls = files.map((file) => file.path);
@@ -27,6 +32,22 @@ const addProduct = catchAsync(
   }
 );
 
+const getAllProducts = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const filters = queryPick(req.query, productFilterableFields);
+    const options = queryPick(req.query, productOptionFields);
+    const result = await ProductService.getAllProducts(filters, options);
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.CREATED,
+      message: 'Product added successfully!',
+      data: result,
+    });
+  }
+);
+
 export const ProductController = {
   addProduct,
+  getAllProducts,
 };

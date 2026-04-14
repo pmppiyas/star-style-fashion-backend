@@ -21,28 +21,37 @@ export interface IProduct {
   brand?: string;
 
   stock: number;
-  sku: string; // Stock Keeping Unit (Unique ID)
+  sku: string;
   status: TProductStatus;
 
-  // ফ্যাশন স্পেসিফিক (Variants)
-  images: string[]; // ছবির লিঙ্ক এর অ্যারে
-  thumbnail: string; // মেইন থাম্বনেইল ছবি
-  colors?: string[]; // যেমন: ['Navy Blue', 'Maroon']
-  sizes?: string[]; // যেমন: ['S', 'M', 'L', 'XL', 'XXL']
-  material?: string; // যেমন: 'Georgette', 'Cherry Fabric'
+  images: string[];
+  thumbnail: string;
+  colors?: string[];
+  sizes?: string[];
+  material?: string;
 
-  // অতিরিক্ত তথ্য
-  isFeatured: boolean; // হোমপেজে হাইলাইট করার জন্য
-  isTodayDeal?: boolean; // বিশেষ অফারের জন্য
+  isFeatured: boolean;
+  isTodayDeal?: boolean;
   ratings: {
     average: number;
     count: number;
   };
 
-  // মেটা ডাটা (SEO এর জন্য)
-  metaTitle?: string;
-  metaDescription?: string;
-
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export type IOptions = {
+  page?: string | number;
+  limit?: string | number;
+  sortBy?: string;
+  sortOrder?: string;
+};
+
+export type IOptionsResult = {
+  page: number;
+  limit: number;
+  skip: number;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+};

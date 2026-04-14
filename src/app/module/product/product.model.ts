@@ -87,8 +87,6 @@ const ProductSchema = new Schema<IProduct>(
       average: { type: Number, default: 0, min: 0, max: 5 },
       count: { type: Number, default: 0 },
     },
-    metaTitle: String,
-    metaDescription: String,
   },
   {
     timestamps: true,
@@ -96,6 +94,6 @@ const ProductSchema = new Schema<IProduct>(
   }
 );
 
-ProductSchema.index({ name: 'text', description: 'text', sku: 'text' });
+ProductSchema.index({ name: 'text', description: 'text' });
 
 export const Product = model<IProduct>('Product', ProductSchema);

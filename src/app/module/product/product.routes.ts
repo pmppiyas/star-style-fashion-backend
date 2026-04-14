@@ -8,9 +8,11 @@ const router = Router();
 
 router.post(
   '/create',
-  multerUpload.array('photo'),
+  multerUpload.array('images'),
   validateRequest(createProductSchema),
   ProductController.addProduct
 );
+
+router.get('', ProductController.getAllProducts);
 
 export const ProductRoutes = router;

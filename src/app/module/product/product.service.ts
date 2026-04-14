@@ -1,5 +1,7 @@
-import { IProduct } from '@app/module/product/product.interface';
+import { IOptions, IProduct } from '@app/module/product/product.interface';
 import { Product } from '@app/module/product/product.model';
+import { calculatePagination } from '@app/utils/calculatePagination';
+import { Types } from 'mongoose';
 import slugify from 'slugify';
 
 const addProduct = async (payload: IProduct) => {
@@ -31,6 +33,68 @@ const addProduct = async (payload: IProduct) => {
   return result;
 };
 
+const getAllProducts = async (filters: any, options: IOptions) => {
+  const { page, limit, skip, sortOrder, sortBy } = calculatePagination(options);
+
+  const { searchTerm, minPrice, maxPrice, categoryId, subCategoryId, ...rest } =
+    filters;
+
+  const andConditions: any[] = [];
+
+  if (categoryId) {
+    andConditions.push({
+      categoryId: new Types.ObjectId(categoryId),
+    });
+  }
+
+  if (subCategoryId) {
+    andConditions.push({
+      subCategoryId: new Types.ObjectId(subCategoryId),
+    });
+  }
+
+  if (searchTerm) {
+    const cleanSearch = searchTerm.trim();
+
+    andConditions.push({
+      $or: [
+        { name: { $regex: new RegExp(cleanSearch, 'i') } },
+        { brand: { $regex: new RegExp(cleanSearch, 'i') } },
+        { description: { $regex: new RegExp(cleanSearch, 'i') } },
+      ],
+    });
+  }
+
+  if (minPrice || maxPrice) {
+    andConditions.push({
+      price: {
+        ...(minPrice && { $gte: Number(minPrice) }),
+        ...(maxPrice && { $lte: Number(maxPrice) }),
+      },
+    });
+  }
+
+  const whereCondition = andConditions.length ? { $and: andConditions } : {};
+
+  const sortCondition: any = {};
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder === 'asc' ? 1 : -1;
+  }
+
+  const result = await Product.find(whereCondition)
+    .sort(sortCondition)
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Product.countDocuments(whereCondition);
+
+  return {
+    meta: { page, limit, total },
+    products: result,
+  };
+};
+
 export const ProductService = {
   addProduct,
+  getAllProducts,
 };
