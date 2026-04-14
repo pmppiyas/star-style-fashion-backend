@@ -3,10 +3,15 @@ import { NextFunction, Request, Response } from 'express';
 import { ZodSchema } from 'zod';
 
 export const validateRequest =
-  (ZodSchema: ZodSchema) =>
+  (schema: ZodSchema) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.body = await ZodSchema.parseAsync(req.body);
+      if (req.body?.body && typeof req.body.body === 'string') {
+        req.body = JSON.parse(req.body.body);
+      }
+
+      req.body = await schema.parseAsync(req.body);
+
       next();
     } catch (error) {
       next(error);

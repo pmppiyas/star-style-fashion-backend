@@ -22,6 +22,11 @@ interface EnvConfig {
     CLIENT_SECRET: string;
     CALLBACK_URL: string;
   };
+  CLOUDINARY: {
+    CLOUD_NAME: string;
+    API_KEY: string;
+    API_SECRET: string;
+  };
 }
 
 const loadEnvVars = (): EnvConfig => {
@@ -39,6 +44,9 @@ const loadEnvVars = (): EnvConfig => {
     'CLIENT_ID',
     'CLIENT_SECRET',
     'CALLBACK_URL',
+    'CLOUD_NAME',
+    'API_KEY',
+    'API_SECRET',
   ];
 
   requiredEnvVars.forEach((key) => {
@@ -66,6 +74,11 @@ const loadEnvVars = (): EnvConfig => {
       CLIENT_ID: process.env.CLIENT_ID as string,
       CLIENT_SECRET: process.env.CLIENT_SECRET as string,
       CALLBACK_URL: process.env.CALLBACK_URL as string,
+    },
+    CLOUDINARY: {
+      CLOUD_NAME: process.env.CLOUD_NAME as string,
+      API_KEY: process.env.API_KEY as string,
+      API_SECRET: process.env.API_SECRET as string,
     },
   };
 };
