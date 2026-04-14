@@ -140,8 +140,20 @@ const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
   return updatedProduct;
 };
 
+const deleteProduct = async (productId: string) => {
+  const isExistProduct = await Product.findById(productId);
+
+  if (!isExistProduct) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Targeted product not found');
+  }
+
+  await Product.findByIdAndUpdate(productId);
+  return null;
+};
+
 export const ProductService = {
   addProduct,
   getAllProducts,
   updateProduct,
+  deleteProduct,
 };
