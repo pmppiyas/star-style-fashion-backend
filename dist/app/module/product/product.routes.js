@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ProductRoutes = void 0;
+const multer_config_1 = require("@app/config/multer.config");
+const checkAuth_1 = require("@app/middleware/checkAuth");
+const validateRequest_1 = require("@app/middleware/validateRequest");
+const product_controller_1 = require("@app/module/product/product.controller");
+const product_validation_1 = require("@app/module/product/product.validation");
+const user_interface_1 = require("@app/module/user/user.interface");
+const express_1 = require("express");
+const router = (0, express_1.Router)();
+router.post('/create', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), multer_config_1.multerUpload.array('images'), (0, validateRequest_1.validateRequest)(product_validation_1.createProductSchema), product_controller_1.ProductController.addProduct);
+router.get('', product_controller_1.ProductController.getAllProducts);
+router.put('/update/:id', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), multer_config_1.multerUpload.array('images'), (0, validateRequest_1.validateRequest)(product_validation_1.updateProductSchema), product_controller_1.ProductController.updateProduct);
+router.delete('/delete/:id', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), product_controller_1.ProductController.deleteProduct);
+exports.ProductRoutes = router;

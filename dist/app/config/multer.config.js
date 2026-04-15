@@ -1,0 +1,44 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.multerUpload = void 0;
+const multer_1 = __importDefault(require("multer"));
+const multer_storage_cloudinary_1 = require("multer-storage-cloudinary");
+const cloudinary_config_1 = require("./cloudinary.config");
+const storage = new multer_storage_cloudinary_1.CloudinaryStorage({
+    cloudinary: cloudinary_config_1.cloudinary,
+    params: async (req, file) => {
+        const fileName = file.originalname
+            .toLowerCase()
+            .replace(/\s+/g, '_')
+            .replace(/\./g, '_')
+            .replace(/[^a-z0-9_]/gi, '');
+        const extension = file.originalname.split('.').pop();
+        const uniqueFileName = Math.random().toString(36).substring(2) +
+            '-' +
+            Date.now() +
+            '-' +
+            fileName;
+        return {
+            folder: 'starStyle',
+            public_id: uniqueFileName,
+            resource_type: 'auto',
+        };
+    },
+});
+exports.multerUpload = (0, multer_1.default)({
+    storage: storage,
+    limits: {
+        fileSize: 5 * 1024 * 1024,
+    },
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('Only image files are allowed'));
+        }
+    },
+});

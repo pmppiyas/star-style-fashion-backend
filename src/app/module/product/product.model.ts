@@ -43,6 +43,10 @@ const ProductSchema = new Schema<IProduct>(
     costPrice: {
       type: Number,
     },
+    solded: {
+      type: Number,
+      default: 0,
+    },
     categoryId: {
       type: Schema.Types.ObjectId,
       ref: 'Category',

@@ -16,6 +16,7 @@ export interface IProduct {
   price: number;
   discountPrice?: number;
   costPrice?: number;
+  solded: number;
   categoryId: Types.ObjectId;
   subCategoryId?: Types.ObjectId;
   brand?: string;
@@ -55,3 +56,10 @@ export type IOptionsResult = {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 };
+
+export type IProductType =
+  | 'banner'
+  | 'new_arraival'
+  | 'best_seller'
+  | 'deal_of_the_day'
+  | 'just_for_you';

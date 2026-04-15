@@ -2,6 +2,7 @@ import {
   productFilterableFields,
   productOptionFields,
 } from '@app/constant/product.constant';
+import { IProductType } from '@app/module/product/product.interface';
 import { ProductService } from '@app/module/product/product.service';
 import catchAsync from '@app/utils/catchAsync';
 import queryPick from '@app/utils/queryPick';
@@ -81,14 +82,33 @@ const deleteProduct = catchAsync(
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.CREATED,
-      message: 'Product updated successfully!',
+      message: 'Product deleted successfully!',
       data: result,
     });
   }
 );
+
+const featuresProduct = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const options = queryPick(req.query, productOptionFields);
+    const result = await ProductService.featuresProducts(
+      req?.query?.type as IProductType,
+      options
+    );
+
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.CREATED,
+      message: 'Featured products retrieved successfully!',
+      data: result,
+    });
+  }
+);
+
 export const ProductController = {
   addProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
+  featuresProduct,
 };

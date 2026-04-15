@@ -1,5 +1,9 @@
 import { AppError } from '@app/error/appError';
-import { IOptions, IProduct } from '@app/module/product/product.interface';
+import {
+  IOptions,
+  IProduct,
+  IProductType,
+} from '@app/module/product/product.interface';
 import { Product } from '@app/module/product/product.model';
 import { calculatePagination } from '@app/utils/calculatePagination';
 import { StatusCodes } from 'http-status-codes';
@@ -86,7 +90,8 @@ const getAllProducts = async (filters: any, options: IOptions) => {
   const result = await Product.find(whereCondition)
     .sort(sortCondition)
     .skip(skip)
-    .limit(limit);
+    .limit(limit)
+    .select('brand name slug price discountPrice ratings thumbnail');
 
   const total = await Product.countDocuments(whereCondition);
 
@@ -151,9 +156,88 @@ const deleteProduct = async (productId: string) => {
   return null;
 };
 
+const featuresProducts = async (type: IProductType, options: IOptions) => {
+  const { limit, skip, sortOrder, sortBy } = calculatePagination(options);
+
+  let results = [];
+
+  const sortCondition: any = {};
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder === 'asc' ? 1 : -1;
+  }
+
+  switch (type) {
+    case 'banner':
+      results = await Product.find({ isFeatured: true })
+        .sort(
+          Object.keys(sortCondition).length ? sortCondition : { createdAt: -1 }
+        )
+        .limit(limit || 5)
+        .select('brand name slug price discountPrice ratings thumbnail');
+      break;
+
+    case 'new_arraival':
+      results = await Product.find()
+        .sort(
+          Object.keys(sortCondition).length ? sortCondition : { createdAt: -1 }
+        )
+        .skip(skip)
+        .limit(limit)
+        .select('brand name slug price discountPrice ratings thumbnail');
+      break;
+
+    case 'best_seller':
+      results = await Product.find()
+        .sort(
+          Object.keys(sortCondition).length
+            ? sortCondition
+            : { 'ratings.average': -1 }
+        )
+        .skip(skip)
+        .limit(limit)
+        .select('brand name slug price discountPrice ratings thumbnail');
+      break;
+
+    case 'deal_of_the_day':
+      results = await Product.find({ isTodayDeal: true })
+        .sort(
+          Object.keys(sortCondition).length ? sortCondition : { updatedAt: -1 }
+        )
+        .skip(skip)
+        .limit(limit)
+        .select('brand name slug price discountPrice ratings thumbnail');
+      break;
+
+    case 'just_for_you':
+      results = await Product.aggregate([
+        { $sample: { size: 50 } },
+        { $skip: skip },
+        { $limit: limit },
+        {
+          $project: {
+            brand: 1,
+            name: 1,
+            slug: 1,
+            price: 1,
+            discountPrice: 1,
+            ratings: 1,
+            thumbnail: 1,
+          },
+        },
+      ]);
+      break;
+
+    default:
+      results = [];
+  }
+
+  return results;
+};
+
 export const ProductService = {
   addProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
+  featuresProducts,
 };

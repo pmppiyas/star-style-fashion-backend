@@ -35,4 +35,6 @@ router.delete(
   ProductController.deleteProduct
 );
 
+router.get('/features', ProductController.featuresProduct);
+
 export const ProductRoutes = router;
