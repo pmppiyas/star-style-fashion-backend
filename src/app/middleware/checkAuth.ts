@@ -1,7 +1,7 @@
 import env from '@app/config/env.config';
 import { AppError } from '@app/error/appError';
 import { User } from '@app/module/user/user.model';
-import { IJwtPayload } from '@app/types/types';
+import { IJwtPayload } from '@app/types/share';
 import { verifyToken } from '@app/utils/jwt';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';

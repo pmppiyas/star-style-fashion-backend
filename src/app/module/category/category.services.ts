@@ -3,6 +3,7 @@ import { Category } from '@app/module/category/category.model';
 import { ICategory } from '@app/module/category/category.interface';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
+import slugify from 'slugify';
 
 const addCategory = async (payload: {
   name: string;
@@ -16,6 +17,7 @@ const addCategory = async (payload: {
 
     const isCategoryExist = await Category.findOne({
       name: payload.name,
+
       parentId: payload.parentId,
     }).session(session);
 
@@ -30,6 +32,10 @@ const addCategory = async (payload: {
       [
         {
           name: payload.name,
+          slug: slugify(payload.name, {
+            lower: true,
+            strict: true,
+          }),
           parentId: payload.parentId,
         },
       ],
@@ -47,13 +53,19 @@ const addCategory = async (payload: {
 
     let createdChildren: ICategory[] = [];
 
-    if (!payload.parentId && payload.children && payload.children.length > 0) {
+    if (payload.children?.length) {
       const childrenToCreate = payload.children.map((child) => ({
         name: child.name,
+        slug: slugify(child.name, {
+          lower: true,
+          strict: true,
+        }),
         parentId: newCategory._id,
       }));
 
-      createdChildren = await Category.create(childrenToCreate, { session });
+      createdChildren = await Category.insertMany(childrenToCreate, {
+        session,
+      });
     }
 
     await session.commitTransaction();
@@ -77,20 +89,18 @@ const buildCategoryTree = (
   parentId: string | null = null
 ): ICategory[] => {
   const categoryList: any[] = [];
-  let filteredCategories: ICategory[] = [];
 
-  if (parentId === null) {
-    filteredCategories = categories.filter((cat) => !cat.parentId);
-  } else {
-    filteredCategories = categories.filter(
-      (cat) => String(cat.parentId) === String(parentId)
-    );
-  }
+  const filteredCategories =
+    parentId === null
+      ? categories.filter((cat) => cat.parentId == null)
+      : categories.filter((cat) => String(cat.parentId) === String(parentId));
 
   for (const cat of filteredCategories) {
     categoryList.push({
       _id: cat._id,
       name: cat.name,
+      slug: cat.slug,
+      parentId: cat.parentId,
       children: buildCategoryTree(categories, String(cat._id)),
     });
   }

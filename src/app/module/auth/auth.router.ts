@@ -1,10 +1,12 @@
+import { checkAuth } from '@app/middleware/checkAuth';
 import { AuthController } from '@app/module/auth/auth.controller';
+import { Role } from '@app/module/user/user.interface';
 import { NextFunction, Request, Response, Router } from 'express';
 import passport from 'passport';
 
 const router = Router();
 
-router.post('/login', AuthController.credentialLogin);
+router.post('/signin', AuthController.credentialLogin);
 
 router.post('/logout', AuthController.logout);
 
@@ -26,4 +28,5 @@ router.get(
   }
 );
 
+router.get('/me', checkAuth(...Object.keys(Role)), AuthController.getMe);
 export const AuthRoutes = router;

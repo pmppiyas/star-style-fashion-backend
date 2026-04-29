@@ -1,5 +1,6 @@
-import env from '@app/config/env.config';
 import { AppError } from '@app/error/appError';
+import { AuthServices } from '@app/module/auth/auth.services';
+import { IJwtPayload } from '@app/types/share';
 import catchAsync from '@app/utils/catchAsync';
 import { clearAuthCookies } from '@app/utils/clearCookie';
 import sendResponse from '@app/utils/sendResponse';
@@ -49,7 +50,20 @@ const logout = catchAsync(
   }
 );
 
+const getMe = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const me = await AuthServices.getMe(req.user as IJwtPayload);
+    sendResponse(res, {
+      success: true,
+      statusCode: StatusCodes.OK,
+      message: 'My data retreived successfully',
+      data: me,
+    });
+  }
+);
+
 export const AuthController = {
   credentialLogin,
   logout,
+  getMe,
 };

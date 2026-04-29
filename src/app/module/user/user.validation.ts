@@ -5,7 +5,7 @@ export const UserZodSchema = z.object({
   number: z.string().refine((val) => /^(?:\+88|88)?(01[3-9]\d{8})$/.test(val), {
     message: 'Please provide a valid Bangladeshi phone number',
   }),
-  location: z.array(z.string()).optional(),
+  location: z.string().optional(),
   profileImage: z.string().optional(),
   password: z
     .string()

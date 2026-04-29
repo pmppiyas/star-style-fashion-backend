@@ -2,6 +2,8 @@ export const productFilterableFields = [
   'searchTerm',
   'name',
   'status',
+  'category',
+  'subcategory',
   'categoryId',
   'subCategoryId',
   'brand',

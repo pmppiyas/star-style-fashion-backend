@@ -37,4 +37,6 @@ router.delete(
 
 router.get('/features', ProductController.featuresProduct);
 
+router.get('/bySlugs', ProductController.getProductByISlug);
+
 export const ProductRoutes = router;

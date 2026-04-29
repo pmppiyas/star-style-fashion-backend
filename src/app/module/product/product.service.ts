@@ -1,7 +1,9 @@
 import { AppError } from '@app/error/appError';
+import { Category } from '@app/module/category/category.model';
 import {
   IOptions,
   IProduct,
+  IProductPayload,
   IProductType,
 } from '@app/module/product/product.interface';
 import { Product } from '@app/module/product/product.model';
@@ -10,7 +12,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
 import slugify from 'slugify';
 
-const addProduct = async (payload: IProduct) => {
+const addProduct = async (payload: IProductPayload) => {
   const baseSlug = slugify(payload.name, {
     lower: true,
     strict: true,
@@ -27,10 +29,31 @@ const addProduct = async (payload: IProduct) => {
   if (payload.discountPrice && payload.discountPrice >= payload.price) {
     throw new Error('Discount price must be less than price');
   }
+  const parsedColors =
+    typeof payload.colors === 'string'
+      ? payload.colors
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : Array.isArray(payload.colors)
+        ? payload.colors
+        : [];
+
+  const parsedSizes =
+    typeof payload.sizes === 'string'
+      ? payload.sizes
+          .split(',')
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : Array.isArray(payload.sizes)
+        ? payload.sizes
+        : [];
 
   const productData = {
     ...payload,
     slug,
+    colors: parsedColors,
+    sizes: parsedSizes,
     isFeatured: payload.isFeatured ?? false,
     status: payload.status ?? 'IN_STOCK',
   };
@@ -42,8 +65,15 @@ const addProduct = async (payload: IProduct) => {
 const getAllProducts = async (filters: any, options: IOptions) => {
   const { page, limit, skip, sortOrder, sortBy } = calculatePagination(options);
 
-  const { searchTerm, minPrice, maxPrice, categoryId, subCategoryId, ...rest } =
-    filters;
+  const {
+    searchTerm,
+    minPrice,
+    maxPrice,
+    categoryId,
+    subCategoryId,
+    category,
+    subcategory,
+  } = filters;
 
   const andConditions: any[] = [];
 
@@ -57,6 +87,31 @@ const getAllProducts = async (filters: any, options: IOptions) => {
     andConditions.push({
       subCategoryId: new Types.ObjectId(subCategoryId),
     });
+  }
+
+  if (category) {
+    const foundCategory = await Category.findOne({
+      slug: category,
+    });
+
+    if (foundCategory) {
+      andConditions.push({
+        categoryId: foundCategory._id,
+      });
+
+      if (subcategory) {
+        const foundSubCategory = await Category.findOne({
+          slug: subcategory,
+          parentId: foundCategory._id,
+        });
+
+        if (foundSubCategory) {
+          andConditions.push({
+            subCategoryId: foundSubCategory._id,
+          });
+        }
+      }
+    }
   }
 
   if (searchTerm) {
@@ -101,8 +156,8 @@ const getAllProducts = async (filters: any, options: IOptions) => {
   };
 };
 
-const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
-  const isExistProduct = await Product.findById(productId);
+const updateProduct = async (slug: string, payload: Partial<IProduct>) => {
+  const isExistProduct = await Product.findById(slug);
 
   if (!isExistProduct) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Targeted product not found');
@@ -137,7 +192,7 @@ const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
     );
   }
 
-  const updatedProduct = await Product.findByIdAndUpdate(productId, payload, {
+  const updatedProduct = await Product.findByIdAndUpdate(slug, payload, {
     returnDocument: 'after',
     runValidators: true,
   });
@@ -145,14 +200,14 @@ const updateProduct = async (productId: string, payload: Partial<IProduct>) => {
   return updatedProduct;
 };
 
-const deleteProduct = async (productId: string) => {
-  const isExistProduct = await Product.findById(productId);
+const deleteProduct = async (slug: string) => {
+  const isExistProduct = await Product.findById(slug);
 
   if (!isExistProduct) {
     throw new AppError(StatusCodes.NOT_FOUND, 'Targeted product not found');
   }
 
-  await Product.findByIdAndUpdate(productId);
+  await Product.findByIdAndUpdate(slug);
   return null;
 };
 
@@ -234,10 +289,23 @@ const featuresProducts = async (type: IProductType, options: IOptions) => {
   return results;
 };
 
+const getProductByISlug = async (slugs: string[]) => {
+  const products = await Product.find({
+    slug: { $in: slugs },
+  }).populate('categoryId subCategoryId');
+
+  if (!products.length) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'No products found');
+  }
+
+  return products;
+};
+
 export const ProductService = {
   addProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
   featuresProducts,
+  getProductByISlug,
 };

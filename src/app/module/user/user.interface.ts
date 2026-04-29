@@ -21,7 +21,7 @@ export interface IUser {
   email?: string;
   number?: string;
   profileImage: string;
-  location: ILocation[];
+  location?: ILocation[];
   role: Role;
   status: IStatus;
   password: string;

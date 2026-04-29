@@ -12,6 +12,21 @@ import './app/config/passport.config';
 
 const app = express();
 
+const allowedOrigin = [env.FRONTEND_URL1];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not alloed by CORS'));
+      }
+    },
+    credentials: true,
+  })
+);
+
 app.use(
   session({
     secret: env.EXPRESS_SESSION_SECRET,
@@ -28,21 +43,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const allowedOrigin = [env.FRONTEND_URL1];
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigin.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not alloed by CORS'));
-      }
-    },
-    credentials: true,
-  })
-);
 
 app.use(cookieParser());
 app.set('trust proxy', 1);

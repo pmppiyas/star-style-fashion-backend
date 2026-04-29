@@ -37,12 +37,13 @@ const getAllProducts = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     const filters = queryPick(req.query, productFilterableFields);
     const options = queryPick(req.query, productOptionFields);
+
     const result = await ProductService.getAllProducts(filters, options);
 
     sendResponse(res, {
       success: true,
       statusCode: StatusCodes.CREATED,
-      message: 'Product added successfully!',
+      message: 'All products retrieved successfully!',
       data: result,
     });
   }
@@ -105,10 +106,26 @@ const featuresProduct = catchAsync(
   }
 );
 
+const getProductByISlug = catchAsync(async (req: Request, res: Response) => {
+  const slugs = req.query.slugs as string;
+
+  const slugArray = slugs.split(',');
+
+  const result = await ProductService.getProductByISlug(slugArray);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Products retrieved successfully!',
+    data: result,
+  });
+});
+
 export const ProductController = {
   addProduct,
   getAllProducts,
   updateProduct,
   deleteProduct,
   featuresProduct,
+  getProductByISlug,
 };
