@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.globalErrHandler = void 0;
-const env_config_1 = __importDefault(require("@app/config/env.config"));
-const appError_1 = require("@app/error/appError");
-const errorHelperFunc_1 = require("@app/helper/errorHelperFunc");
+const env_config_1 = __importDefault(require("../config/env.config"));
+const appError_1 = require("../error/appError");
+const errorHelperFunc_1 = require("../helper/errorHelperFunc");
 const http_status_codes_1 = require("http-status-codes");
 const globalErrHandler = (err, req, res, nest) => {
     let statusCode = http_status_codes_1.StatusCodes.BAD_REQUEST;

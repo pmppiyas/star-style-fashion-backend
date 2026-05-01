@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const env_config_1 = __importDefault(require("@app/config/env.config"));
+const env_config_1 = __importDefault(require("./app/config/env.config"));
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const http_status_codes_1 = require("http-status-codes");
-const routes_1 = __importDefault(require("@app/routes"));
-const globalErrHandler_1 = require("@app/middleware/globalErrHandler");
-const notFound_1 = require("@app/middleware/notFound");
+const routes_1 = __importDefault(require("./app/routes"));
+const globalErrHandler_1 = require("./app/middleware/globalErrHandler");
+const notFound_1 = require("./app/middleware/notFound");
 const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
 require("./app/config/passport.config");

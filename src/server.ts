@@ -10,7 +10,6 @@ const startServer = async () => {
   try {
     await mongoose.connect(env.DB_URL);
     console.log('Connected to Star Style Database');
-
     server = app.listen(env.PORT, () => {
       console.log(`Server is running on port ${env.PORT}`);
     });

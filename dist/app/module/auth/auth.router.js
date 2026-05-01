@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthRoutes = void 0;
-const checkAuth_1 = require("@app/middleware/checkAuth");
-const auth_controller_1 = require("@app/module/auth/auth.controller");
-const user_interface_1 = require("@app/module/user/user.interface");
+const checkAuth_1 = require("../../middleware/checkAuth");
+const auth_controller_1 = require("../../module/auth/auth.controller");
+const user_interface_1 = require("../../module/user/user.interface");
 const express_1 = require("express");
 const passport_1 = __importDefault(require("passport"));
 const router = (0, express_1.Router)();

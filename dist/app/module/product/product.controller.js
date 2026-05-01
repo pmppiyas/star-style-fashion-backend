@@ -4,11 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductController = void 0;
-const product_constant_1 = require("@app/constant/product.constant");
-const product_service_1 = require("@app/module/product/product.service");
-const catchAsync_1 = __importDefault(require("@app/utils/catchAsync"));
-const queryPick_1 = __importDefault(require("@app/utils/queryPick"));
-const sendResponse_1 = __importDefault(require("@app/utils/sendResponse"));
+const product_constant_1 = require("../../constant/product.constant");
+const product_service_1 = require("../../module/product/product.service");
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const queryPick_1 = __importDefault(require("../../utils/queryPick"));
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const addProduct = (0, catchAsync_1.default)(async (req, res, next) => {
     const files = req.files;

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/server.ts",
     "start": "node -r tsconfig-paths/register dist/server.js",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "slugify": "^1.6.9",
+    "tsc-alias": "^1.8.17",
     "tsconfig-paths": "^4.2.0",
     "zod": "^4.3.6"
   },

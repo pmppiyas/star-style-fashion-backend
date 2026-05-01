@@ -4,13 +4,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
-const appError_1 = require("@app/error/appError");
-const auth_services_1 = require("@app/module/auth/auth.services");
-const catchAsync_1 = __importDefault(require("@app/utils/catchAsync"));
-const clearCookie_1 = require("@app/utils/clearCookie");
-const sendResponse_1 = __importDefault(require("@app/utils/sendResponse"));
-const setCookie_1 = require("@app/utils/setCookie");
-const userTokem_1 = require("@app/utils/userTokem");
+const appError_1 = require("../../error/appError");
+const auth_services_1 = require("../../module/auth/auth.services");
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const clearCookie_1 = require("../../utils/clearCookie");
+const sendResponse_1 = __importDefault(require("../../utils/sendResponse"));
+const setCookie_1 = require("../../utils/setCookie");
+const userTokem_1 = require("../../utils/userTokem");
 const http_status_codes_1 = require("http-status-codes");
 const passport_1 = __importDefault(require("passport"));
 const credentialLogin = (0, catchAsync_1.default)(async (req, res, next) => {

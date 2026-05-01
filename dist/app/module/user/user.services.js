@@ -1,9 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = exports.signup = void 0;
-const appError_1 = require("@app/error/appError");
-const user_model_1 = require("@app/module/user/user.model");
-const hashingPassword_1 = require("@app/utils/hashingPassword");
+const appError_1 = require("../../error/appError");
+const user_model_1 = require("../../module/user/user.model");
+const hashingPassword_1 = require("../../utils/hashingPassword");
 const http_status_codes_1 = require("http-status-codes");
 const signup = async (payload) => {
     const { password, number, location, ...rest } = payload;

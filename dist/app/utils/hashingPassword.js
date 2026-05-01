@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.hashingPassword = void 0;
-const env_config_1 = __importDefault(require("@app/config/env.config"));
+const env_config_1 = __importDefault(require("../config/env.config"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const hashingPassword = async (password) => {
     const saltRound = Number(env_config_1.default.BCRYPT.SALT_ROUND);

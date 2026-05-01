@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CategoryService = void 0;
-const appError_1 = require("@app/error/appError");
-const category_model_1 = require("@app/module/category/category.model");
+const appError_1 = require("../../error/appError");
+const category_model_1 = require("../../module/category/category.model");
 const http_status_codes_1 = require("http-status-codes");
 const mongoose_1 = __importDefault(require("mongoose"));
 const slugify_1 = __importDefault(require("slugify"));

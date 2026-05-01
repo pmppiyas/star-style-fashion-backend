@@ -4,10 +4,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
-const appError_1 = require("@app/error/appError");
-const category_model_1 = require("@app/module/category/category.model");
-const product_model_1 = require("@app/module/product/product.model");
-const calculatePagination_1 = require("@app/utils/calculatePagination");
+const appError_1 = require("../../error/appError");
+const category_model_1 = require("../../module/category/category.model");
+const product_model_1 = require("../../module/product/product.model");
+const calculatePagination_1 = require("../../utils/calculatePagination");
 const http_status_codes_1 = require("http-status-codes");
 const mongoose_1 = require("mongoose");
 const slugify_1 = __importDefault(require("slugify"));

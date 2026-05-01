@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderService = void 0;
 const order_model_1 = require("./order.model");
-const product_model_1 = require("@app/module/product/product.model");
-const appError_1 = require("@app/error/appError");
+const product_model_1 = require("../../module/product/product.model");
+const appError_1 = require("../../error/appError");
 const http_status_codes_1 = require("http-status-codes");
 const createOrder = async ({ payload }) => {
     const { items, customer, paymentMethod, shippingFee } = payload;

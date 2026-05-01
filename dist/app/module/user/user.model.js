@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
-const user_interface_1 = require("@app/module/user/user.interface");
+const user_interface_1 = require("../../module/user/user.interface");
 const mongoose_1 = require("mongoose");
 const UserSchema = new mongoose_1.Schema({
     _id: {
