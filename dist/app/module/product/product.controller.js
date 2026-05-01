@@ -33,7 +33,7 @@ const getAllProducts = (0, catchAsync_1.default)(async (req, res, next) => {
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_codes_1.StatusCodes.CREATED,
-        message: 'Product added successfully!',
+        message: 'All products retrieved successfully!',
         data: result,
     });
 });
@@ -57,7 +57,28 @@ const deleteProduct = (0, catchAsync_1.default)(async (req, res, next) => {
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_codes_1.StatusCodes.CREATED,
-        message: 'Product updated successfully!',
+        message: 'Product deleted successfully!',
+        data: result,
+    });
+});
+const featuresProduct = (0, catchAsync_1.default)(async (req, res, next) => {
+    const options = (0, queryPick_1.default)(req.query, product_constant_1.productOptionFields);
+    const result = await product_service_1.ProductService.featuresProducts(req?.query?.type, options);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_codes_1.StatusCodes.CREATED,
+        message: 'Featured products retrieved successfully!',
+        data: result,
+    });
+});
+const getProductByISlug = (0, catchAsync_1.default)(async (req, res) => {
+    const slugs = req.query.slugs;
+    const slugArray = slugs.split(',');
+    const result = await product_service_1.ProductService.getProductByISlug(slugArray);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: 'Products retrieved successfully!',
         data: result,
     });
 });
@@ -66,4 +87,6 @@ exports.ProductController = {
     getAllProducts,
     updateProduct,
     deleteProduct,
+    featuresProduct,
+    getProductByISlug,
 };

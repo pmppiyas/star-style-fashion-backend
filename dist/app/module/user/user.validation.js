@@ -7,7 +7,7 @@ exports.UserZodSchema = zod_1.z.object({
     number: zod_1.z.string().refine((val) => /^(?:\+88|88)?(01[3-9]\d{8})$/.test(val), {
         message: 'Please provide a valid Bangladeshi phone number',
     }),
-    location: zod_1.z.array(zod_1.z.string()).optional(),
+    location: zod_1.z.string().optional(),
     profileImage: zod_1.z.string().optional(),
     password: zod_1.z
         .string()

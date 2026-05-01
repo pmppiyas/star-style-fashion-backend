@@ -15,6 +15,18 @@ const passport_1 = __importDefault(require("passport"));
 const express_session_1 = __importDefault(require("express-session"));
 require("./app/config/passport.config");
 const app = (0, express_1.default)();
+const allowedOrigin = [env_config_1.default.FRONTEND_URL1];
+app.use((0, cors_1.default)({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigin.includes(origin)) {
+            callback(null, true);
+        }
+        else {
+            callback(new Error('Not alloed by CORS'));
+        }
+    },
+    credentials: true,
+}));
 app.use((0, express_session_1.default)({
     secret: env_config_1.default.EXPRESS_SESSION_SECRET,
     resave: false,
@@ -28,18 +40,6 @@ app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
-const allowedOrigin = [env_config_1.default.FRONTEND_URL1];
-app.use((0, cors_1.default)({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigin.includes(origin)) {
-            callback(null, true);
-        }
-        else {
-            callback(new Error('Not alloed by CORS'));
-        }
-    },
-    credentials: true,
-}));
 app.use((0, cookie_parser_1.default)());
 app.set('trust proxy', 1);
 app.use('/api/v1', routes_1.default);

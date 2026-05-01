@@ -44,6 +44,10 @@ const ProductSchema = new mongoose_1.Schema({
     costPrice: {
         type: Number,
     },
+    solded: {
+        type: Number,
+        default: 0,
+    },
     categoryId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'Category',

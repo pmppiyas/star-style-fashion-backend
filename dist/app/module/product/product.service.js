@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
 const appError_1 = require("@app/error/appError");
+const category_model_1 = require("@app/module/category/category.model");
 const product_model_1 = require("@app/module/product/product.model");
 const calculatePagination_1 = require("@app/utils/calculatePagination");
 const http_status_codes_1 = require("http-status-codes");
@@ -23,9 +24,27 @@ const addProduct = async (payload) => {
     if (payload.discountPrice && payload.discountPrice >= payload.price) {
         throw new Error('Discount price must be less than price');
     }
+    const parsedColors = typeof payload.colors === 'string'
+        ? payload.colors
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : Array.isArray(payload.colors)
+            ? payload.colors
+            : [];
+    const parsedSizes = typeof payload.sizes === 'string'
+        ? payload.sizes
+            .split(',')
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : Array.isArray(payload.sizes)
+            ? payload.sizes
+            : [];
     const productData = {
         ...payload,
         slug,
+        colors: parsedColors,
+        sizes: parsedSizes,
         isFeatured: payload.isFeatured ?? false,
         status: payload.status ?? 'IN_STOCK',
     };
@@ -34,7 +53,7 @@ const addProduct = async (payload) => {
 };
 const getAllProducts = async (filters, options) => {
     const { page, limit, skip, sortOrder, sortBy } = (0, calculatePagination_1.calculatePagination)(options);
-    const { searchTerm, minPrice, maxPrice, categoryId, subCategoryId, ...rest } = filters;
+    const { searchTerm, minPrice, maxPrice, categoryId, subCategoryId, category, subcategory, } = filters;
     const andConditions = [];
     if (categoryId) {
         andConditions.push({
@@ -45,6 +64,27 @@ const getAllProducts = async (filters, options) => {
         andConditions.push({
             subCategoryId: new mongoose_1.Types.ObjectId(subCategoryId),
         });
+    }
+    if (category) {
+        const foundCategory = await category_model_1.Category.findOne({
+            slug: category,
+        });
+        if (foundCategory) {
+            andConditions.push({
+                categoryId: foundCategory._id,
+            });
+            if (subcategory) {
+                const foundSubCategory = await category_model_1.Category.findOne({
+                    slug: subcategory,
+                    parentId: foundCategory._id,
+                });
+                if (foundSubCategory) {
+                    andConditions.push({
+                        subCategoryId: foundSubCategory._id,
+                    });
+                }
+            }
+        }
     }
     if (searchTerm) {
         const cleanSearch = searchTerm.trim();
@@ -72,15 +112,16 @@ const getAllProducts = async (filters, options) => {
     const result = await product_model_1.Product.find(whereCondition)
         .sort(sortCondition)
         .skip(skip)
-        .limit(limit);
+        .limit(limit)
+        .select('brand name slug price discountPrice ratings thumbnail');
     const total = await product_model_1.Product.countDocuments(whereCondition);
     return {
         meta: { page, limit, total },
         products: result,
     };
 };
-const updateProduct = async (productId, payload) => {
-    const isExistProduct = await product_model_1.Product.findById(productId);
+const updateProduct = async (slug, payload) => {
+    const isExistProduct = await product_model_1.Product.findById(slug);
     if (!isExistProduct) {
         throw new appError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, 'Targeted product not found');
     }
@@ -102,23 +143,94 @@ const updateProduct = async (productId, payload) => {
         payload.discountPrice >= payload.price) {
         throw new appError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, 'Discount price must be less than regular price');
     }
-    const updatedProduct = await product_model_1.Product.findByIdAndUpdate(productId, payload, {
+    const updatedProduct = await product_model_1.Product.findByIdAndUpdate(slug, payload, {
         returnDocument: 'after',
         runValidators: true,
     });
     return updatedProduct;
 };
-const deleteProduct = async (productId) => {
-    const isExistProduct = await product_model_1.Product.findById(productId);
+const deleteProduct = async (slug) => {
+    const isExistProduct = await product_model_1.Product.findById(slug);
     if (!isExistProduct) {
         throw new appError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, 'Targeted product not found');
     }
-    await product_model_1.Product.findByIdAndUpdate(productId);
+    await product_model_1.Product.findByIdAndUpdate(slug);
     return null;
+};
+const featuresProducts = async (type, options) => {
+    const { limit, skip, sortOrder, sortBy } = (0, calculatePagination_1.calculatePagination)(options);
+    let results = [];
+    const sortCondition = {};
+    if (sortBy && sortOrder) {
+        sortCondition[sortBy] = sortOrder === 'asc' ? 1 : -1;
+    }
+    switch (type) {
+        case 'banner':
+            results = await product_model_1.Product.find({ isFeatured: true })
+                .sort(Object.keys(sortCondition).length ? sortCondition : { createdAt: -1 })
+                .limit(limit || 5)
+                .select('brand name slug price discountPrice ratings thumbnail');
+            break;
+        case 'new_arraival':
+            results = await product_model_1.Product.find()
+                .sort(Object.keys(sortCondition).length ? sortCondition : { createdAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .select('brand name slug price discountPrice ratings thumbnail');
+            break;
+        case 'best_seller':
+            results = await product_model_1.Product.find()
+                .sort(Object.keys(sortCondition).length
+                ? sortCondition
+                : { 'ratings.average': -1 })
+                .skip(skip)
+                .limit(limit)
+                .select('brand name slug price discountPrice ratings thumbnail');
+            break;
+        case 'deal_of_the_day':
+            results = await product_model_1.Product.find({ isTodayDeal: true })
+                .sort(Object.keys(sortCondition).length ? sortCondition : { updatedAt: -1 })
+                .skip(skip)
+                .limit(limit)
+                .select('brand name slug price discountPrice ratings thumbnail');
+            break;
+        case 'just_for_you':
+            results = await product_model_1.Product.aggregate([
+                { $sample: { size: 50 } },
+                { $skip: skip },
+                { $limit: limit },
+                {
+                    $project: {
+                        brand: 1,
+                        name: 1,
+                        slug: 1,
+                        price: 1,
+                        discountPrice: 1,
+                        ratings: 1,
+                        thumbnail: 1,
+                    },
+                },
+            ]);
+            break;
+        default:
+            results = [];
+    }
+    return results;
+};
+const getProductByISlug = async (slugs) => {
+    const products = await product_model_1.Product.find({
+        slug: { $in: slugs },
+    }).populate('categoryId subCategoryId');
+    if (!products.length) {
+        throw new appError_1.AppError(http_status_codes_1.StatusCodes.NOT_FOUND, 'No products found');
+    }
+    return products;
 };
 exports.ProductService = {
     addProduct,
     getAllProducts,
     updateProduct,
     deleteProduct,
+    featuresProducts,
+    getProductByISlug,
 };

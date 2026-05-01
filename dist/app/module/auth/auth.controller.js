@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const appError_1 = require("@app/error/appError");
+const auth_services_1 = require("@app/module/auth/auth.services");
 const catchAsync_1 = __importDefault(require("@app/utils/catchAsync"));
 const clearCookie_1 = require("@app/utils/clearCookie");
 const sendResponse_1 = __importDefault(require("@app/utils/sendResponse"));
@@ -42,7 +43,17 @@ const logout = (0, catchAsync_1.default)(async (req, res, next) => {
         data: null,
     });
 });
+const getMe = (0, catchAsync_1.default)(async (req, res, next) => {
+    const me = await auth_services_1.AuthServices.getMe(req.user);
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: 'My data retreived successfully',
+        data: me,
+    });
+});
 exports.AuthController = {
     credentialLogin,
     logout,
+    getMe,
 };

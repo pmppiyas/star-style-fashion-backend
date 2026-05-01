@@ -13,4 +13,6 @@ router.post('/create', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), 
 router.get('', product_controller_1.ProductController.getAllProducts);
 router.put('/update/:id', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), multer_config_1.multerUpload.array('images'), (0, validateRequest_1.validateRequest)(product_validation_1.updateProductSchema), product_controller_1.ProductController.updateProduct);
 router.delete('/delete/:id', (0, checkAuth_1.checkAuth)(user_interface_1.Role.ADMIN), product_controller_1.ProductController.deleteProduct);
+router.get('/features', product_controller_1.ProductController.featuresProduct);
+router.get('/bySlugs', product_controller_1.ProductController.getProductByISlug);
 exports.ProductRoutes = router;

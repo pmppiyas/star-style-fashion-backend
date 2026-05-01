@@ -4,6 +4,7 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import bcryptjs from 'bcryptjs';
 import env from '@app/config/env.config';
+import { IStatus } from '@app/module/user/user.interface';
 
 passport.use(
   new LocalStrategy(
@@ -77,7 +78,7 @@ passport.use(
           name: name,
           email: email,
           profileImage: profilePhoto,
-          status: 'ACTIVE',
+          status: IStatus.ACTIVE,
         });
 
         return done(null, newUser);

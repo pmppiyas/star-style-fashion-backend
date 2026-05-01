@@ -11,6 +11,10 @@ const categorySchema = new mongoose_1.Schema({
         type: String,
         required: true,
     },
+    slug: {
+        type: String,
+        required: true,
+    },
     parentId: {
         type: mongoose_1.Types.ObjectId,
         ref: 'Category',

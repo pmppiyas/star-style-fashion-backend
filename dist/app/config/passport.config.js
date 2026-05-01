@@ -9,6 +9,7 @@ const passport_local_1 = require("passport-local");
 const passport_google_oauth20_1 = require("passport-google-oauth20");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const env_config_1 = __importDefault(require("@app/config/env.config"));
+const user_interface_1 = require("@app/module/user/user.interface");
 passport_1.default.use(new passport_local_1.Strategy({
     usernameField: 'identifier',
     passwordField: 'password',
@@ -60,7 +61,7 @@ passport_1.default.use(new passport_google_oauth20_1.Strategy({
             name: name,
             email: email,
             profileImage: profilePhoto,
-            status: 'ACTIVE',
+            status: user_interface_1.IStatus.ACTIVE,
         });
         return done(null, newUser);
     }
