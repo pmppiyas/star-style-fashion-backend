@@ -2,7 +2,7 @@
   "name": "borkha-house-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register ./src/server.ts",
     "start": "node -r tsconfig-paths/register dist/server.js",
@@ -14,7 +14,6 @@
   "packageManager": "pnpm@10.17.1",
   "dependencies": {
     "bcryptjs": "^3.0.3",
-    "borkha-house-backend": "link:",
     "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
