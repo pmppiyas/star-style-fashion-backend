@@ -7,8 +7,6 @@ export const validateRequest =
     try {
       const raw = req.body?.body || req.body?.data || req.body;
 
-      console.log(raw);
-
       if (typeof raw === 'string') {
         req.body = JSON.parse(raw);
       } else {

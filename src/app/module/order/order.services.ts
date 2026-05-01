@@ -1,8 +1,8 @@
-import { IOrder } from './order.interface';
 import { Order } from './order.model';
-import { Product } from '../product/product.model';
+import { Product } from '@app/module/product/product.model';
 import { AppError } from '@app/error/appError';
 import { StatusCodes } from 'http-status-codes';
+import { IOrder, OrderStatus } from '@app/module/order/order.interface';
 
 const createOrder = async ({ payload }: { payload: IOrder }) => {
   const { items, customer, paymentMethod, shippingFee } = payload;
@@ -40,6 +40,7 @@ const createOrder = async ({ payload }: { payload: IOrder }) => {
     verifiedItems.push({
       slug: item.slug,
       quantity: item.quantity,
+      size: item.size,
     });
 
     product.stock -= item.quantity;
@@ -63,6 +64,35 @@ const createOrder = async ({ payload }: { payload: IOrder }) => {
   return order;
 };
 
+const getOrders = async ({ status }: { status?: string }) => {
+  const query: Record<string, any> = {};
+  if (status) {
+    query.status = status.toLocaleUpperCase();
+  }
+  const orders = await Order.find(query).sort({ createdAt: -1 });
+  return orders;
+};
+
+const updateOrderStatus = async ({
+  orderId,
+  status,
+}: {
+  orderId: string;
+  status: string;
+}) => {
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new AppError(StatusCodes.NOT_FOUND, 'Order not found');
+  } else {
+    order.status = status.toLocaleUpperCase() as OrderStatus;
+    await order.save();
+    return order;
+  }
+};
+
 export const OrderService = {
   createOrder,
+  getOrders,
+  updateOrderStatus,
 };

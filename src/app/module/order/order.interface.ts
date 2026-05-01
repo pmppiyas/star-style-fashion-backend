@@ -1,6 +1,7 @@
 export interface IOrderItem {
   slug: string;
   quantity: number;
+  size: string;
 }
 
 export interface ICustomerInfo {

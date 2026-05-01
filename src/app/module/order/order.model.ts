@@ -13,6 +13,10 @@ const orderItemSchema = new Schema(
       required: true,
       min: 1,
     },
+    size: {
+      type: String,
+      trim: true,
+    },
   },
   {
     _id: false,
