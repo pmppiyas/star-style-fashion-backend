@@ -1,6 +1,6 @@
-import app from 'src/app';
-import env from '@app/config/env.config';
-import handleServerEvents from '@app/utils/handleServerEvent';
+import app from './app';
+import env from './app/config/env.config';
+import handleServerEvents from './app/utils/handleServerEvent';
 import { Server } from 'http';
 import mongoose from 'mongoose';
 

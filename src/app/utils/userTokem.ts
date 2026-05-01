@@ -1,6 +1,6 @@
-import env from '@app/config/env.config';
-import { IUser } from '@app/module/user/user.interface';
-import { generateToken } from '@app/utils/jwt';
+import env from '.././config/env.config';
+import { IUser } from '.././module/user/user.interface';
+import { generateToken } from '.././utils/jwt';
 
 export const createUserToken = (user: Partial<IUser>) => {
   const jwtPayload = {

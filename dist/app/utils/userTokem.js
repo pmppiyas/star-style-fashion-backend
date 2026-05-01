@@ -4,8 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserToken = void 0;
-const env_config_1 = __importDefault(require("../config/env.config"));
-const jwt_1 = require("../utils/jwt");
+const env_config_1 = __importDefault(require(".././config/env.config"));
+const jwt_1 = require(".././utils/jwt");
 const createUserToken = (user) => {
     const jwtPayload = {
         userId: user._id,

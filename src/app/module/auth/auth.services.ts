@@ -1,5 +1,5 @@
-import { User } from '@app/module/user/user.model';
-import { IJwtPayload } from '@app/types/share';
+import { User } from '../../module/user/user.model';
+import { IJwtPayload } from '../../types/share';
 
 const getMe = async (payload: IJwtPayload) => {
   const user = await User.findById(payload.userId);

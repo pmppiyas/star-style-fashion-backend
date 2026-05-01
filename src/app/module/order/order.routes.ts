@@ -1,4 +1,4 @@
-import { OrderController } from '@app/module/order/order.controller';
+import { OrderController } from '../../module/order/order.controller';
 import { Router } from 'express';
 
 const router = Router();

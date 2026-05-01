@@ -1,4 +1,4 @@
-import { IJwtPayload } from '@app/types/types';
+import { IJwtPayload } from '../types/types';
 
 declare global {
   namespace Express {

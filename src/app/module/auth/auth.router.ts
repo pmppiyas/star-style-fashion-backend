@@ -1,6 +1,7 @@
-import { checkAuth } from '@app/middleware/checkAuth';
-import { AuthController } from '@app/module/auth/auth.controller';
-import { Role } from '@app/module/user/user.interface';
+import { checkAuth } from '../../middleware/checkAuth';
+import { AuthController } from '../../module/auth/auth.controller';
+import { Role } from '../../module/user/user.interface';
+
 import { NextFunction, Request, Response, Router } from 'express';
 import passport from 'passport';
 

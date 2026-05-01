@@ -1,11 +1,12 @@
-import { checkAuth } from '@app/middleware/checkAuth';
-import { validateRequest } from '@app/middleware/validateRequest';
-import { CategoryController } from '@app/module/category/category.controller';
+import { checkAuth } from '../../middleware/checkAuth';
+import { validateRequest } from '../../middleware/validateRequest';
+import { CategoryController } from '../../module/category/category.controller';
 import {
   createCategoryWithSubSchema,
   updateCategorySchema,
-} from '@app/module/category/category.validation';
-import { Role } from '@app/module/user/user.interface';
+} from '../../module/category/category.validation';
+import { Role } from '../../module/user/user.interface';
+
 import { Router } from 'express';
 
 const router = Router();

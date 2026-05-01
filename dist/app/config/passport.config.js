@@ -3,13 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const user_model_1 = require("../module/user/user.model");
+const user_model_1 = require("@app/module/user/user.model");
 const passport_1 = __importDefault(require("passport"));
 const passport_local_1 = require("passport-local");
 const passport_google_oauth20_1 = require("passport-google-oauth20");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
-const env_config_1 = __importDefault(require("../config/env.config"));
-const user_interface_1 = require("../module/user/user.interface");
+const env_config_1 = __importDefault(require("@app/config/env.config"));
+const user_interface_1 = require("@app/module/user/user.interface");
 passport_1.default.use(new passport_local_1.Strategy({
     usernameField: 'identifier',
     passwordField: 'password',

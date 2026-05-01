@@ -1,4 +1,4 @@
-import env from '@app/config/env.config';
+import env from '.././config/env.config';
 import bcryptjs from 'bcryptjs';
 
 export const hashingPassword = async (password: string): Promise<string> => {

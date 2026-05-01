@@ -1,6 +1,6 @@
-import { OrderService } from '@app/module/order/order.services';
-import catchAsync from '@app/utils/catchAsync';
-import sendResponse from '@app/utils/sendResponse';
+import { OrderService } from '../../module/order/order.services';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

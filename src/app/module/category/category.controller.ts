@@ -1,6 +1,6 @@
-import { CategoryService } from '@app/module/category/category.services';
-import catchAsync from '@app/utils/catchAsync';
-import sendResponse from '@app/utils/sendResponse';
+import { CategoryService } from '../../module/category/category.services';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

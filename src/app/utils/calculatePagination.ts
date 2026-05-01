@@ -1,7 +1,7 @@
 import {
   IOptions,
   IOptionsResult,
-} from '@app/module/product/product.interface';
+} from '.././module/product/product.interface';
 
 export const calculatePagination = (options: IOptions = {}): IOptionsResult => {
   const page = Number(options.page) || 1;

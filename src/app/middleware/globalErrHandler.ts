@@ -1,6 +1,6 @@
-import env from '@app/config/env.config';
-import { AppError } from '@app/error/appError';
-import { handleZodValidationError } from '@app/helper/errorHelperFunc';
+import env from '../config/env.config';
+import { AppError } from '../error/appError';
+import { handleZodValidationError } from '../helper/errorHelperFunc';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

@@ -1,12 +1,12 @@
 import {
   productFilterableFields,
   productOptionFields,
-} from '@app/constant/product.constant';
-import { IProductType } from '@app/module/product/product.interface';
-import { ProductService } from '@app/module/product/product.service';
-import catchAsync from '@app/utils/catchAsync';
-import queryPick from '@app/utils/queryPick';
-import sendResponse from '@app/utils/sendResponse';
+} from '../../constant/product.constant';
+import { IProductType } from '../../module/product/product.interface';
+import { ProductService } from '../../module/product/product.service';
+import catchAsync from '../../utils/catchAsync';
+import queryPick from '../../utils/queryPick';
+import sendResponse from '../../utils/sendResponse';
 import { NextFunction, Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 

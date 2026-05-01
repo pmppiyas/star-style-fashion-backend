@@ -1,7 +1,7 @@
-import { AppError } from '@app/error/appError';
-import { IUser } from '@app/module/user/user.interface';
-import { User } from '@app/module/user/user.model';
-import { hashingPassword } from '@app/utils/hashingPassword';
+import { AppError } from '../../error/appError';
+import { IUser } from '../../module/user/user.interface';
+import { User } from '../../module/user/user.model';
+import { hashingPassword } from '../../utils/hashingPassword';
 import { StatusCodes } from 'http-status-codes';
 
 export const signup = async (payload: IUser) => {

@@ -1,8 +1,8 @@
 import { Order } from './order.model';
-import { Product } from '@app/module/product/product.model';
-import { AppError } from '@app/error/appError';
+import { Product } from '../../module/product/product.model';
+import { AppError } from '../../error/appError';
 import { StatusCodes } from 'http-status-codes';
-import { IOrder, OrderStatus } from '@app/module/order/order.interface';
+import { IOrder, OrderStatus } from '../../module/order/order.interface';
 
 const createOrder = async ({ payload }: { payload: IOrder }) => {
   const { items, customer, paymentMethod, shippingFee } = payload;

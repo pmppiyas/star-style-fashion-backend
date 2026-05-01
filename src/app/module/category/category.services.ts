@@ -1,6 +1,6 @@
-import { AppError } from '@app/error/appError';
-import { Category } from '@app/module/category/category.model';
-import { ICategory } from '@app/module/category/category.interface';
+import { AppError } from '../../error/appError';
+import { Category } from '../../module/category/category.model';
+import { ICategory } from '../../module/category/category.interface';
 import { StatusCodes } from 'http-status-codes';
 import mongoose from 'mongoose';
 import slugify from 'slugify';

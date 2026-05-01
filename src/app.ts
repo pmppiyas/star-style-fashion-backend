@@ -1,11 +1,11 @@
-import env from '@app/config/env.config';
+import env from '../src/app/config/env.config';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { StatusCodes } from 'http-status-codes';
-import router from '@app/routes';
-import { globalErrHandler } from '@app/middleware/globalErrHandler';
-import { notFound } from '@app/middleware/notFound';
+import router from '../src/app/routes';
+import { globalErrHandler } from '../src/app/middleware/globalErrHandler';
+import { notFound } from '../src/app/middleware/notFound';
 import passport from 'passport';
 import session from 'express-session';
 import './app/config/passport.config';

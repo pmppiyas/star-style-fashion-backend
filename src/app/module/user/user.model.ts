@@ -1,4 +1,4 @@
-import { IStatus, IUser, Role } from '@app/module/user/user.interface';
+import { IStatus, IUser, Role } from '../../module/user/user.interface';
 import { model, Schema, Types } from 'mongoose';
 
 const UserSchema = new Schema<IUser>(

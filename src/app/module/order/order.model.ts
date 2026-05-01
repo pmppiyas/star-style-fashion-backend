@@ -1,4 +1,4 @@
-import { IOrder } from '@app/module/order/order.interface';
+import { IOrder } from '../../module/order/order.interface';
 import { Schema, model } from 'mongoose';
 
 const orderItemSchema = new Schema(

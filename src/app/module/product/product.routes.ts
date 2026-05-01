@@ -1,12 +1,12 @@
-import { multerUpload } from '@app/config/multer.config';
-import { checkAuth } from '@app/middleware/checkAuth';
-import { validateRequest } from '@app/middleware/validateRequest';
-import { ProductController } from '@app/module/product/product.controller';
+import { multerUpload } from '../../config/multer.config';
+import { checkAuth } from '../../middleware/checkAuth';
+import { validateRequest } from '../../middleware/validateRequest';
+import { ProductController } from '../../module/product/product.controller';
 import {
   createProductSchema,
   updateProductSchema,
-} from '@app/module/product/product.validation';
-import { Role } from '@app/module/user/user.interface';
+} from '../../module/product/product.validation';
+import { Role } from '../../module/user/user.interface';
 import { Router } from 'express';
 
 const router = Router();

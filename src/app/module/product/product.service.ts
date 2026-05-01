@@ -1,13 +1,13 @@
-import { AppError } from '@app/error/appError';
-import { Category } from '@app/module/category/category.model';
+import { AppError } from '../../error/appError';
+import { Category } from '../../module/category/category.model';
 import {
   IOptions,
   IProduct,
   IProductPayload,
   IProductType,
-} from '@app/module/product/product.interface';
-import { Product } from '@app/module/product/product.model';
-import { calculatePagination } from '@app/utils/calculatePagination';
+} from '../../module/product/product.interface';
+import { Product } from '../../module/product/product.model';
+import { calculatePagination } from '../../utils/calculatePagination';
 import { StatusCodes } from 'http-status-codes';
 import { Types } from 'mongoose';
 import slugify from 'slugify';
