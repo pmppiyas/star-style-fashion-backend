@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "ts-node-dev ./src/server.ts",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
@@ -28,8 +28,6 @@
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "slugify": "^1.6.9",
-    "tsc-alias": "^1.8.17",
-    "tsconfig-paths": "^4.2.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
