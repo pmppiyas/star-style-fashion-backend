@@ -3,6 +3,7 @@ import { Product } from '../../module/product/product.model';
 import { AppError } from '../../error/appError';
 import { StatusCodes } from 'http-status-codes';
 import { IOrder, OrderStatus } from '../../module/order/order.interface';
+import { Customer } from '../customer/customer.model';
 
 const createOrder = async ({ payload }: { payload: IOrder }) => {
   const { items, customer, paymentMethod, shippingFee } = payload;
@@ -51,8 +52,25 @@ const createOrder = async ({ payload }: { payload: IOrder }) => {
 
   const grandTotal = subtotal + shippingFee;
 
+  let existingCustomer = await Customer.findOne({
+    phone: customer.phone,
+  });
+
+  if (!existingCustomer) {
+    existingCustomer = await Customer.create({
+      name: customer.name,
+      phone: customer.phone,
+      address: customer.address,
+
+      totalOrders: 0,
+      totalSpent: 0,
+      orders: [],
+    });
+  }
+
   const order = await Order.create({
     customer,
+    customerId: existingCustomer._id,
     paymentMethod,
     items: verifiedItems,
     subtotal,
@@ -60,6 +78,18 @@ const createOrder = async ({ payload }: { payload: IOrder }) => {
     grandTotal,
     status: 'PENDING',
   });
+
+  existingCustomer.orders.push(order._id);
+
+  existingCustomer.totalOrders += 1;
+  existingCustomer.totalSpent += grandTotal;
+
+  existingCustomer.averageOrderValue =
+    existingCustomer.totalSpent / existingCustomer.totalOrders;
+
+  existingCustomer.lastOrderAt = new Date();
+
+  await existingCustomer.save();
 
   return order;
 };

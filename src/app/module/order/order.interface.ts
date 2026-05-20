@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export interface IOrderItem {
   slug: string;
   quantity: number;
@@ -19,6 +21,8 @@ export type OrderStatus =
 
 export interface IOrder {
   customer: ICustomerInfo;
+  customerId?: Types.ObjectId;
+
   paymentMethod: string;
   items: IOrderItem[];
 

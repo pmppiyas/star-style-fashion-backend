@@ -1,5 +1,6 @@
 import { AuthRoutes } from '../module/auth/auth.router';
 import { CategoryRoutes } from '../module/category/category.routes';
+import { CustomerRoutes } from '../module/customer/customer.routes';
 import { MetaRoutes } from '../module/meta/meta.routes';
 import { OrderRoutes } from '../module/order/order.routes';
 import { ProductRoutes } from '../module/product/product.routes';
@@ -33,6 +34,10 @@ const moduleRoutes: ImoduleRoutes[] = [
   {
     path: '/meta',
     route: MetaRoutes,
+  },
+  {
+    path: '/customer',
+    route: CustomerRoutes,
   },
 ];
 

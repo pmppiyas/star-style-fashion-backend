@@ -8,11 +8,13 @@ const orderItemSchema = new Schema(
       required: true,
       trim: true,
     },
+
     quantity: {
       type: Number,
       required: true,
       min: 1,
     },
+
     size: {
       type: String,
       trim: true,
@@ -30,11 +32,13 @@ const customerSchema = new Schema(
       required: true,
       trim: true,
     },
+
     phone: {
       type: String,
       required: true,
       trim: true,
     },
+
     address: {
       type: String,
       required: true,
@@ -51,6 +55,11 @@ const orderSchema = new Schema<IOrder>(
     customer: {
       type: customerSchema,
       required: true,
+    },
+
+    customerId: {
+      type: Schema.Types.ObjectId,
+      ref: 'Customer',
     },
 
     paymentMethod: {

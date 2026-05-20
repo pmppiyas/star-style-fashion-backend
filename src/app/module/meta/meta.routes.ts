@@ -6,3 +6,4 @@ const router = Router();
 router.get('/admin', MetaController.getAdminMeta);
 
 export const MetaRoutes = router;
+
