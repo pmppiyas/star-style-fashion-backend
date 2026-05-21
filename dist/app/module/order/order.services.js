@@ -5,6 +5,7 @@ const order_model_1 = require("./order.model");
 const product_model_1 = require("../../module/product/product.model");
 const appError_1 = require("../../error/appError");
 const http_status_codes_1 = require("http-status-codes");
+const customer_model_1 = require("../customer/customer.model");
 const createOrder = async ({ payload }) => {
     const { items, customer, paymentMethod, shippingFee } = payload;
     if (!items.length) {
@@ -34,8 +35,22 @@ const createOrder = async ({ payload }) => {
         await product.save();
     }
     const grandTotal = subtotal + shippingFee;
+    let existingCustomer = await customer_model_1.Customer.findOne({
+        phone: customer.phone,
+    });
+    if (!existingCustomer) {
+        existingCustomer = await customer_model_1.Customer.create({
+            name: customer.name,
+            phone: customer.phone,
+            address: customer.address,
+            totalOrders: 0,
+            totalSpent: 0,
+            orders: [],
+        });
+    }
     const order = await order_model_1.Order.create({
         customer,
+        customerId: existingCustomer._id,
         paymentMethod,
         items: verifiedItems,
         subtotal,
@@ -43,6 +58,13 @@ const createOrder = async ({ payload }) => {
         grandTotal,
         status: 'PENDING',
     });
+    existingCustomer.orders.push(order._id);
+    existingCustomer.totalOrders += 1;
+    existingCustomer.totalSpent += grandTotal;
+    existingCustomer.averageOrderValue =
+        existingCustomer.totalSpent / existingCustomer.totalOrders;
+    existingCustomer.lastOrderAt = new Date();
+    await existingCustomer.save();
     return order;
 };
 const getOrders = async ({ status }) => {

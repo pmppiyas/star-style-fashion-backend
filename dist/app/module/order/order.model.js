@@ -44,6 +44,10 @@ const orderSchema = new mongoose_1.Schema({
         type: customerSchema,
         required: true,
     },
+    customerId: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'Customer',
+    },
     paymentMethod: {
         type: String,
         enum: ['cash_on_delivery'],

@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const auth_router_1 = require("../module/auth/auth.router");
 const category_routes_1 = require("../module/category/category.routes");
+const customer_routes_1 = require("../module/customer/customer.routes");
+const meta_routes_1 = require("../module/meta/meta.routes");
 const order_routes_1 = require("../module/order/order.routes");
 const product_routes_1 = require("../module/product/product.routes");
 const user_routes_1 = require("../module/user/user.routes");
@@ -27,6 +29,14 @@ const moduleRoutes = [
     {
         path: '/order',
         route: order_routes_1.OrderRoutes,
+    },
+    {
+        path: '/meta',
+        route: meta_routes_1.MetaRoutes,
+    },
+    {
+        path: '/customer',
+        route: customer_routes_1.CustomerRoutes,
     },
 ];
 moduleRoutes.forEach((route) => {
